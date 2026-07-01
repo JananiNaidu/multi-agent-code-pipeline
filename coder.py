@@ -1,5 +1,9 @@
-import requests
-import json
+import os
+from groq import Groq
+from dotenv import load_dotenv
+
+load_dotenv()
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def run_coder(task: dict) -> str:
     prompt = f"""
@@ -10,13 +14,16 @@ Function name: {task['name']}
 Description: {task['description']}
 """
 
-    response = requests.post("http://localhost:11434/api/generate", json={
-        "model": "codellama",
-        "prompt": prompt,
-        "stream": False
-    })
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[{"role": "user", "content": prompt}]
+    )
 
-    code = response.json()["response"].strip()
+    code = response.choices[0].message.content.strip()
+    if "```" in code:
+        lines = code.split("\n")
+        lines = [l for l in lines if not l.strip().startswith("```")]
+        code = "\n".join(lines)
     return code
 
 

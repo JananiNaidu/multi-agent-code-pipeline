@@ -1,5 +1,10 @@
-import requests
+import os
 import json
+from groq import Groq
+from dotenv import load_dotenv
+
+load_dotenv()
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def run_planner(user_spec: str) -> list:
     prompt = f"""
@@ -17,19 +22,15 @@ Respond ONLY in valid JSON format like this:
 Requirement: {user_spec}
 """
 
-    response = requests.post("http://localhost:11434/api/generate", json={
-        "model": "codellama",
-        "prompt": prompt,
-        "stream": False
-    })
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[{"role": "user", "content": prompt}]
+    )
 
-    raw = response.json()["response"]
-
-    # Extract JSON from response
+    raw = response.choices[0].message.content
     start = raw.find("[")
     end = raw.rfind("]") + 1
     json_str = raw[start:end]
-
     tasks = json.loads(json_str)
     return tasks
 
