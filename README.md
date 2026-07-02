@@ -18,36 +18,43 @@ Each agent has a single responsibility:
 ## 🛠️ Tech Stack
 
 - Python 3
-- Ollama (local LLM runner)
-- CodeLlama (free, open-source code model)
+- Groq API (ultra-fast LLM inference)
+- Llama 3.3 70B (state-of-the-art code model)
 - pytest
-- No paid APIs — runs 100% free and offline
+- Streamlit (web interface)
 
 ## ⚙️ Setup & Installation
 
-**1. Install Ollama** — Download from [ollama.com](https://ollama.com) and pull the model:
-
+**1. Clone the repo:**
 ```bash
-ollama pull codellama
+git clone https://github.com/JananiNaidu/multi-agent-code-pipeline.git
+cd multi-agent-code-pipeline
 ```
 
-**2. Install Python dependencies:**
-
+**2. Install dependencies:**
 ```bash
-pip install requests pytest
+pip install -r requirements.txt
 ```
 
-**3. Start Ollama:**
+**3. Add your Groq API key:**
+Create a `.env` file in the root folder:
+GROQ_API_KEY=your_groq_api_key_here
 
+Get a free key at [console.groq.com](https://console.groq.com)
+
+**4. Run the web app:**
 ```bash
-ollama serve
+streamlit run app.py
 ```
 
-**4. Run the pipeline:**
-
+**Or run the pipeline directly:**
 ```bash
 python orchestrator.py
 ```
+
+**5. Or use the live demo:**
+👉 [multi-agent-code-gen-janani.streamlit.app](https://multi-agent-code-gen-janani.streamlit.app)
+
 
 ## 📁 Project Structure
 
