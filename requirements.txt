@@ -1,2 +1,5 @@
 requests
 pytest
+groq
+python-dotenv
+streamlit
